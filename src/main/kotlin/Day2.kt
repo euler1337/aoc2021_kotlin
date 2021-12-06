@@ -1,5 +1,4 @@
 import java.io.File
-import kotlin.streams.toList
 
 class Day2 {
 
@@ -7,7 +6,7 @@ class Day2 {
 
     fun a() {
         val input: List<Pair<String, Int>> = File(fileName).readLines()
-            .map(this::parswRow)
+            .map(this::parseRow)
 
         val xPos = input.stream()
             .filter { (command, _)  -> command == "forward" }
@@ -19,15 +18,33 @@ class Day2 {
             .map { (command, distance) -> if (command == "down") distance else -distance }
             .reduce(Integer::sum)
 
-        print(xPos.get() * zPos.get())
+        print("2a: ${xPos.get() * zPos.get()} \n")
     }
 
-    fun parswRow(raw : String): Pair<String, Int> {
+    fun parseRow(raw : String): Pair<String, Int> {
         val list : List<String> = raw.split(" ")
         return Pair(list[0], list[1].toInt())
     }
 
     fun b() {
+        val input: List<Pair<String, Int>> = File(fileName).readLines()
+            .map(this::parseRow)
 
+        var aim = 0; var xPos = 0; var zPos = 0
+        for (row in input) {
+            when (row.first) {
+                "forward" -> {
+                    xPos += row.second
+                    zPos += row.second * aim
+                }
+                "down" -> {
+                    aim += row.second
+                }
+                "up" -> {
+                    aim -= row.second
+                }
+            }
+        }
+        print("2b: ${xPos * zPos} \n")
     }
 }
